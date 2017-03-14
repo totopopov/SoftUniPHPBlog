@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %}
+
+{% block main %}
+
+    <div class="container body-content">
+        <div class="row">
+            <div class="col-md-12">
+                <article>
+                    <header>
+                        <h2>{{ article.title }}</h2>
+                    </header>
+
+                    <p>
+                        {{ article.content }}
+                    </p>
+
+                    <p>
+                        {% for tag in article.tags  %}
+                            <a class="btn btn-default btn-xs" href="{{ path('articles_with_tag', {'name':tag.name}) }} ">{{ tag.name }}</a>
+                        {% endfor %}
+                    </p>
+
+                    <small class="author">
+                        {{ article.author }}
+                    </small>
+
+                    <small class="date">
+                        <ul class="list-unstyled">
+                            <li> Created: {{ article.dateAdded.format("Y-M-d H:i:s") }}  Server Time</li>
+                            {% if (article.dateAdded != article.lastEdited) %}
+                                <li> Last edited: {{ article.lastEdited.format("Y-M-d H:i:s") }}  Server Time</li>
+                            {% endif %}
+                            <li><a   class="btn btn-default btn-xs" href="{{path('category_articles', {'id': article.categoryId })  }}"><strong>{{ article.category }} </strong></a></li>
+                        </ul>
+                    </small>
+
+
+                    <footer>
+
+                        <div class="pull-right">
+
+                            {% if app.getUser() and (app.getUser().isAuthor(article) or app.getUser().isAdmin() ) %}
+                                <a class="btn btn-primary btn-xs" href="{{ path('article_edit', {'id':article.id}) }}">Edit</a>
+                                <a class="btn btn-danger btn-xs" href="{{ path('article_delete', {'id':article.id}) }}">Delete</a>
+                            {% endif %}
+                            <a class="btn btn-default btn-xs" href="{{ path('category_articles', {'id': article.categoryId}) }}">back &raquo;</a>
+                        </div>
+                    </footer>
+                </article>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}
+
